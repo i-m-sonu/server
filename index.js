@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const connectToDb = require('./db');
 const cookieParser = require('cookie-parser');
-const User = require("./model");
-const Login = require("./model");
+const { User } = require("./model")
+
 
 const server = express();
 server.use(cors());
@@ -13,7 +13,7 @@ connectToDb();
 
 server.post('/user', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
-    // console.log(req.body);
+    console.log(req.body);
     try {
         const user = new User({
             firstName,
@@ -28,20 +28,6 @@ server.post('/user', async (req, res) => {
     }
 });
 
-server.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    console.log(req.body);
-    try {
-        const login = new Login({
-            email,
-            password
-        });
-        await login.save();
-        res.status(200).json({ message: "Login successful" });
-    } catch (err) {
-        res.status(500).json({ message: "Error logging in" });
-    }
-})
 server.use("/", (req, res) => {
     res.json({ message: "Server Started and db connected" });
 })
